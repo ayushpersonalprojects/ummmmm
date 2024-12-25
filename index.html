@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winter Surprise</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #b6fbff , #83a4d4);
+            overflow: hidden;
+            color: #333;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+            margin-top: 50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title {
+            font-size: 24px;
+            color: #7f2714;
+        }
+
+        .instructions {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #7f2714;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5a1d10;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .envelope-container {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            margin: 20px auto;
+        }
+
+        .envelope-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1s ease-in-out;
+        }
+
+        .letter {
+            position: absolute;
+            width: 80%;
+            height: 50%;
+            top: 25%;
+            left: 10%;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .envelope-container.open .envelope-image {
+            transform: rotateX(-180deg);
+        }
+
+        .envelope-container.open .letter {
+            opacity: 1;
+        }
+
+        .letter img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .decoration {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+            animation: float 10s infinite linear;
+        }
+
+        .decoration img {
+            width: 40px;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(-100px);
+            }
+            to {
+                transform: translateY(110vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Winter Surprise</h1>
+        <div id="questionnaire">
+            <p class="instructions">Answer these questions to reveal the envelope:</p>
+            <div class="question">
+                <label>1. You are the cutest _ _ _ _ _ _ _ _ _.</label>
+                <input type="text" id="q1">
+            </div>
+            <div class="question">
+                <label>2. Our favorite drink to share is _ _ _ _ _ _ _.</label>
+                <input type="text" id="q2">
+            </div>
+            <div class="question">
+                <label>3. The place where we first met is _ _.</label>
+                <input type="text" id="q3">
+            </div>
+            <button id="checkAnswers">Submit Answers</button>
+        </div>
+
+        <div id="envelope-section" class="hidden">
+            <p class="instructions">Guess the password to open the envelope:</p>
+            <input type="password" id="password" placeholder="Enter password">
+            <button id="unlock">Unlock</button>
+            <div class="envelope-container" id="envelope">
+                <img src="cute-envelope-with-heart-isolated-icon-vector-29597715-Photoroom.png" alt="Envelope" class="envelope-image">
+                <div class="letter">
+                    <img src="will be.jpg" alt="Cute Letter">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Replace these with your custom answers and password
+        const correctAnswers = ["pineapple", "nothing", "pw"];
+        const password = "betu";
+
+        document.getElementById("checkAnswers").addEventListener("click", () => {
+            const q1 = document.getElementById("q1").value.toLowerCase();
+            const q2 = document.getElementById("q2").value.toLowerCase();
+            const q3 = document.getElementById("q3").value.toLowerCase();
+
+            if (q1 === correctAnswers[0] && q2 === correctAnswers[1] && q3 === correctAnswers[2]) {
+                document.getElementById("questionnaire").classList.add("hidden");
+                document.getElementById("envelope-section").classList.remove("hidden");
+            } else {
+                alert("Oops! Some answers are incorrect. Try again!");
+            }
+        });
+
+        document.getElementById("unlock").addEventListener("click", () => {
+            const enteredPassword = document.getElementById("password").value;
+
+            if (enteredPassword === password) {
+                const envelope = document.getElementById("envelope");
+                envelope.classList.add("open");
+            } else {
+                alert("Wrong password. Try again!");
+            }
+        });
+
+        // Generate random decorations
+        const decorations = ["images (11)-Photoroom.png","2fec7941-a739-4739-81ba-5fca25643a09-Photoroom.png", "images (10)-Photoroom.png", "cf6d04621cc94d5d16036ffa49252487-Photoroom (1).png"];
+        const body = document.body;
+
+        for (let i = 0; i < 20; i++) {
+            const decoration = document.createElement("div");
+            decoration.classList.add("decoration");
+            const img = document.createElement("img");
+            img.src = decorations[Math.floor(Math.random() * decorations.length)];
+            decoration.appendChild(img);
+
+            // Random positions and animation delays
+            decoration.style.left = Math.random() * 100 + "vw";
+            decoration.style.top = Math.random() * 100 + "vh";
+            decoration.style.animationDelay = Math.random() * 5 + "s";
+
+            body.appendChild(decoration);
+        }
+    </script>
+</body>
+</html>
